@@ -1,34 +1,39 @@
 'use strict'
-var Kraken = require('kraken');
-var fs = require("fs");
-var async = require("async");
-var request = require('request');
+
+var Kraken = require('kraken')
+var fs = require('fs')
+var async = require('async')
+var request = require('request')
+var configTypes = require('./config.json')
 
 var externals = {}
 
-externals.senRequest = function(urlService, parameter) {
-  return new Promise(function(resolve, reject) {
-  	var url = urlService + parameter;
-  	console.log('Url callback', url)
-	request(url, function (error, response, body) {		
-		return resolve('ok')
+externals.sendRequest = function (urlService) {
+	return new Promise(function (resolve, reject) {
+		console.log('Url callback', urlService)
+		request(urlService, function (error, response, body) {
+			resolve('ok')
+		})
 	})
-  })
 }
 
-externals.handler = (event, context, callback) => {
+externals.callToNext = function (success, message, callback) {
+    if (success) {
+        return callback()
+    }
+    
+    return callback(message)
+}
+
+externals.handler = function(event, context, callback) {
 
 	var kraken = new Kraken({
 		'api_key': '3b566aa6c8c21d78f2ac628cdeb7b84e',
 		'api_secret': '099f09d9395a3e9a03c131ac0ef1fa067f996a20'
-	});	
+	})	
 
 	var idParameter = event.query.id === undefined ? Math.floor((Math.random() * 10000)) : event.query.id	
-
-	var urlCallback = event.query.callback === undefined ? 'http://www.google.com' : event.query.callback
-
-	var content = fs.readFileSync("config.json");
-	var configTypes = JSON.parse(content);
+	var urlCallback = event.query.callback
 	var typeParameter = event.query.type
 
 	if (!typeParameter in configTypes)
@@ -51,33 +56,33 @@ externals.handler = (event, context, callback) => {
 			},
 			webp: true,
 			lossy: true
-		};
+		}
 
-		kraken.url(params, function (status) {
-			if (status.success) {
-				externals.senRequest(urlCallback, '?id='+idParameter+'&success=true')
-				.then(function(response){
-					callback()	
-				})
-				
+		kraken.url(params, function (response) {			
+
+			if (urlCallback) {
+				var success = (response.success) ? 'true' : 'false'
+				var urlCallbackResponse = urlCallback + '?id=' + idParameter + '&success=' + success
+			    externals.sendRequest(urlCallbackResponse)
+				    .then(() => {
+				        externals.callToNext(response.success, response.message, callback)
+				    })
 			} else {
-				externals.senRequest(urlCallback, '?id='+idParameter+'&success=false')
-				.then(function(response){
-					callback()	
-				})				
+			    externals.callToNext(response.success, response.message, callback)
 			}
-		});
+			
+		})
 
 	}, function (err) {
 		if (err) {
-			console.log('A file failed to process');
-			callback(null, {"success": "Processing request id " + idParameter});
+			console.log('A file failed to process')
+			callback(err, {"message": "Processing request id " + idParameter})
 		} else {
-			console.log('A file success to process');
-			callback(null, {"success": "Processing request id " + idParameter});
+			console.log('A file success to process')
+			callback(null, {"message": "Processing request id " + idParameter})
 		}
-	});	
-};
+	})	
+}
 
 
 module.exports = externals
