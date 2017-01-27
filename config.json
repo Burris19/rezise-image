@@ -1,0 +1,23 @@
+{
+	"facebook": {
+		"avatar": {
+			"width": 700,
+			"height": 600
+		},
+		"centro": {
+			"width": 500,
+			"height": 340
+		}
+	},
+	"instagram": {
+		"avatar": {
+			"width": 649,
+			"height": 340
+		},
+		"centro": {
+			"width": 649,
+			"height": 340
+		}
+	}
+}
+
