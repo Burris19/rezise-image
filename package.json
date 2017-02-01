@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "async": "^2.1.4",
+    "bluebird": "^3.4.7",
     "kraken": "^0.3.3",
     "request": "^2.79.0"
   }
