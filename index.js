@@ -10,8 +10,8 @@ var nock = require('nock');
 
 var externals = {}
 var kraken = new Kraken({
-	'api_key': '3b566aa6c8c21d78f2ac628cdeb7b84e',
-	'api_secret': '099f09d9395a3e9a03c131ac0ef1fa067f996a20'
+	'api_key': 'xxxxxxxxx',
+	'api_secret': 'xxxxxxxxxx'
 })	
 var urlObject = []
 var objectParameter = []
@@ -45,8 +45,8 @@ externals.uploadImages = function(settings){
 					strategy: 'exact'
 				},
 				s3_store: {
-					key: 'AKIAJBVITO43KTLBDOLQ',
-					secret: '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',
+					key: 'xxxxxxxxx',
+					secret: 'xxxxxxxxxxxx',
 					bucket: 'test-lambda-smartly',
 					path: 'images/' + settings.typeParameter + '/' + settings.idParameter + file.width + 'x' + file.height + '.jpg'
 				},
