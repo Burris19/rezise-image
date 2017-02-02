@@ -13,5 +13,11 @@
     "bluebird": "^3.4.7",
     "kraken": "^0.3.3",
     "request": "^2.79.0"
+  },
+  "devDependencies": {
+    "bucker": "^1.1.1",
+    "code": "^4.0.0",
+    "lab": "^12.1.0",
+    "nock": "^9.0.2"
   }
 }

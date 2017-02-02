@@ -6,6 +6,7 @@ var async = require('async')
 var request = require('request')
 var Promise = require("bluebird");
 var configTypes = require('./config.json')
+var nock = require('nock');
 
 var externals = {}
 var kraken = new Kraken({
@@ -19,14 +20,16 @@ externals.sendRequest = function (urlService, id, data) {
 	return new Promise(function (resolve, reject) {	
 		request.post({
         	url: urlService,
-         	body: {
+         	data: {
          		'id': id,
          		'data': data
          	}
-        }, function(error, response, body){
-            resolve('ok')
+        }, function(error, response){
+        	if (error) {
+        		resolve({'error': error})
+        	}
+            resolve({'response': response})
     	});
-
 	})
 }
 
@@ -53,7 +56,7 @@ externals.uploadImages = function(settings){
 
 			kraken.url(params, function (response) {
 				if (response.success) {
-	        		settings.urlObject.push({'url': response.kraked_url, 'success': response.success});		        		
+	        		settings.urlObject.push({'url': response.kraked_url});		        		
 	    		}
 	    		callback()
 			})		
