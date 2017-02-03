@@ -6,13 +6,12 @@ const Lab = require('lab')
 const nock = require('nock')
 
 const Lambda = require('../index.js')
+const configTypes = require('../config.json')
 const Logger = Bucker.createLogger({ name: '/tests/index.js'})
 
 const lab = exports.lab = Lab.script()
 const describe = lab.describe
 const it = lab.it
-const before = lab.before
-const after = lab.after
 const expect = Code.expect
 
 describe('Lambda Function', () => {
@@ -33,4 +32,25 @@ describe('Lambda Function', () => {
 		})
 	})
 
+	it('Testing function uploadImages well :)', done => {
+
+		let objectParameter = [];
+		let urlObject = [];
+		objectParameter['configTypes'] = configTypes['facebook'];
+		objectParameter['urlImage'] = 'http://ondesarrollo.com/wp-content/uploads/2016/11/testing.jpg'
+		objectParameter['typeParameter'] = 'facebook'
+		objectParameter['idParameter'] = 'testing'
+		objectParameter['urlObject'] = urlObject
+		
+		Lambda.uploadImages(objectParameter)
+		.then(response => {
+			console.log(response)
+			expect(response).to.be.an.array()
+			response.forEach(function(item) {			    
+				expect(item).to.be.an.object()
+				expect(item).to.include('url');
+			})
+			done()
+		})
+	})
 })
