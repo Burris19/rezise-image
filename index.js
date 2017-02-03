@@ -6,12 +6,14 @@ var async = require('async')
 var request = require('request')
 var Promise = require("bluebird");
 var configTypes = require('./config.json')
+var secretKeys = require('./secretKeys.json')
+
 var nock = require('nock');
 
 var externals = {}
 var kraken = new Kraken({
-	'api_key': 'xxxxxxxxx',
-	'api_secret': 'xxxxxxxxxx'
+	'api_key': secretKeys.api_key,
+	'api_secret': secretKeys.api_secret
 })	
 var urlObject = []
 var objectParameter = []
@@ -45,8 +47,8 @@ externals.uploadImages = function(settings){
 					strategy: 'exact'
 				},
 				s3_store: {
-					key: 'xxxxxxxxx',
-					secret: 'xxxxxxxxxxxx',
+					key: secretKeys.key,
+					secret: secretKeys.secret,
 					bucket: 'test-lambda-smartly',
 					path: 'images/' + settings.typeParameter + '/' + settings.idParameter + file.width + 'x' + file.height + '.jpg'
 				},

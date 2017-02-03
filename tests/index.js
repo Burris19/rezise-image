@@ -16,9 +16,8 @@ const after = lab.after
 const expect = Code.expect
 
 describe('Lambda Function', () => {
-	it('Testing function uploadImages well :)', done => {			
-		var urlCallback = ''
-		// var urlCallback = 'http://myapp.iriscouch.com'		
+	it('Testing function uploadImages well :)', done => {					
+		var urlCallback = 'http://myapp.iriscouch.com'		
 		var idParameter = 'testId'
 		var data = [{'url': 'imagesOne'}, {'url': 'imagesTwo'}]
 
@@ -33,4 +32,5 @@ describe('Lambda Function', () => {
         	done()
 		})
 	})
+
 })
