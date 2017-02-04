@@ -91,7 +91,7 @@ externals.handler = function(event, context) {
 			}
 			return null 
 		}).then(function(response){
-			context.done()
+			context.done(response)
 		})
 }
 
